@@ -34,4 +34,4 @@ client.on('ready', () => {
 });
 
 // Log in to Discord using your bot token
-client.login('MTIwODAwMTY0Mjc3NTk2OTg2Mg.GRx_4z.4Vc71MZDzsE7UO8Qz8opwE_Xu8ecNfuDGziyMI');
+client.login(process.env.BOT_TOKEN);
