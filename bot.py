@@ -23,7 +23,7 @@ states = ['Sleeping', 'Eating', 'Esport', 'Deadge']
 probabilities = [0.9, 0.0499995, 0.0499995, 0.000001]
 
 # Initialize the current state
-current_state = 'Sleeping'
+current_state = 'Waking up'
 
 def get_response(user_input:str) -> str:
     response = openai.ChatCompletion.create(
