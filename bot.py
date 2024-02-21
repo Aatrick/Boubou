@@ -31,7 +31,7 @@ async def change_status():
 
 @bot.command()
 async def generate(ctx, phrase: discord.Option(str), adjectives: discord.Option(str)):
-    await ctx.respond(f"here's a picture of : {phrase} \n whith : {adjectives}")
+    await ctx.respond(f"here's a picture of : {phrase} \n with : {adjectives}")
     workflow_api.gen(phrase, adjectives)
     #open the last image in /output and send it
     image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
