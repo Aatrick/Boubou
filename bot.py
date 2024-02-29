@@ -9,6 +9,7 @@ import meina
 import SDXLog
 import pixelSDXL
 import ultraSDXL
+import meinauudethf
 import glob
 
 dotenv.load_dotenv()
@@ -70,6 +71,14 @@ async def generate_meina(ctx, prompt: discord.Option(str), width: discord.Option
 async def generate_uumeina(ctx, prompt: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
     await ctx.respond(f"here's a picture of : {prompt}")
     uumeina.gen(prompt, width, height)
+    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
+    latest_image = max(image_files, key=os.path.getctime)
+    await ctx.send(file=discord.File(latest_image))
+
+@bot.command()
+async def generate_meinauudethf(ctx, prompt: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
+    await ctx.respond(f"here's a picture of : {prompt}")
+    meinauudethf.gen(prompt, width, height)
     image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
     latest_image = max(image_files, key=os.path.getctime)
     await ctx.send(file=discord.File(latest_image))
