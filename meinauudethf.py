@@ -169,7 +169,7 @@ def gen(prompt, width, height):
         ultimatesdupscale = NODE_CLASS_MAPPINGS["UltimateSDUpscale"]()
         saveimage = SaveImage()
 
-        for q in range(10):
+        for q in range(1):
             ksampler_239 = ksampler.sample(
                 seed=random.randint(1, 2**64),
                 steps=50,
