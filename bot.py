@@ -1,16 +1,14 @@
 import discord
+from discord.ext import tasks
 import os
 import dotenv
 import random
-from discord.ext import tasks
-from discord.commands import OptionChoice
-import uumeina
-import meina
-import SDXLog
-import pixelSDXL
-import ultraSDXL
-import meinauudethf
 import glob
+import sys
+try:
+    sys.path.insert(1, 'C:\\Dev\\LightDiffusion\\')
+    from LightDiffusion import pipeline
+except: print("LightDiffusion not available or incorrectly accessed, proceeding without generative AI")
 
 dotenv.load_dotenv()
 TOKEN=os.getenv("DISCORD_TOKEN")
@@ -23,9 +21,8 @@ current_state = 'Waking up'
 
 @bot.event
 async def on_ready():
-    print(f"We have logged in as {bot.user}")
-    change_status.start()
-
+    print('We have logged in as {0.user}'.format(bot))
+    
 @tasks.loop(minutes=1)
 async def change_status():
     global current_state
@@ -36,51 +33,15 @@ async def change_status():
     await bot.change_presence(activity=discord.Game(name=current_state))
 
 @bot.command()
-async def generate_psdxl(ctx, phrase: discord.Option(str), adjectives: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
-    await ctx.respond(f"here's a picture of : {phrase} \n with : {adjectives}")
-    pixelSDXL.gen(phrase, adjectives, width, height)
-    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
-    latest_image = max(image_files, key=os.path.getctime)
-    await ctx.send(file=discord.File(latest_image))
-
-@bot.command()
-async def generate_uusdxl(ctx, phrase: discord.Option(str), adjectives: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
-    await ctx.respond(f"here's a picture of : {phrase} \n with : {adjectives}")
-    ultraSDXL.gen(phrase, adjectives, width, height)
-    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
-    latest_image = max(image_files, key=os.path.getctime)
-    await ctx.send(file=discord.File(latest_image))
-
-@bot.command()
-async def generate_sdxl(ctx, phrase: discord.Option(str), adjectives: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
-    await ctx.respond(f"here's a picture of : {phrase} \n with : {adjectives}")
-    SDXLog.gen(phrase, adjectives, width, height)
-    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
-    latest_image = max(image_files, key=os.path.getctime)
-    await ctx.send(file=discord.File(latest_image))
-
-@bot.command()
-async def generate_meina(ctx, prompt: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
+async def generate(ctx, prompt: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
     await ctx.respond(f"here's a picture of : {prompt}")
-    meina.gen(prompt, width, height)
-    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
-    latest_image = max(image_files, key=os.path.getctime)
-    await ctx.send(file=discord.File(latest_image))
+    pipeline(prompt, width, height)
+    image_files = glob.glob('C:\\Dev\\LightDiffusion\\_internal\\output\\*.png')
+    print(max(image_files, key=os.path.getctime))
+    await ctx.followup.send(file=discord.File(max(image_files, key=os.path.getctime)))
 
 @bot.command()
-async def generate_uumeina(ctx, prompt: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
-    await ctx.respond(f"here's a picture of : {prompt}")
-    uumeina.gen(prompt, width, height)
-    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
-    latest_image = max(image_files, key=os.path.getctime)
-    await ctx.send(file=discord.File(latest_image))
-
-@bot.command()
-async def generate_meinauudethf(ctx, prompt: discord.Option(str), width: discord.Option(int), height: discord.Option(int)):
-    await ctx.respond(f"here's a picture of : {prompt}")
-    meinauudethf.gen(prompt, width, height)
-    image_files = glob.glob('C:/Users/Aatricks/Desktop/ComfyUI/output/*.png')
-    latest_image = max(image_files, key=os.path.getctime)
-    await ctx.send(file=discord.File(latest_image))
+async def hello(ctx):
+  await ctx.respond(f"Hello, {ctx.author}!")
 
 bot.run(TOKEN)
